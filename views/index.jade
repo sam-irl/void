@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1 Welcome to The Void
+  if(!user)
+    h2 Whisper into the void, and hear others.
+    a(href='/login') Login &nbsp;
+    a(href='/register') Register
+  if(user)
+    h2 #{user.level} into the void, and hear others.
+    include message
