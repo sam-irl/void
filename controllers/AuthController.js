@@ -7,6 +7,7 @@ var userController = {};
 // Restrict access to root page
 userController.home = function(req, res) {
   res.render('index', { user : req.user });
+  console.log(req.user);
 };
 
 // Go to registration page
@@ -17,11 +18,9 @@ userController.register = function(req, res) {
 // Post registration
 userController.doRegister = function(req, res) {
   User.register(new User({ username : req.body.username }), req.body.password, function(err, user) {
-    if (err) {
-      err.status = 'Please try again';
-      err.stack = ':('
-      return res.render('error', err);
-    }
+    //if (err) {
+    //  res.render('registerError');
+    //}
 
     passport.authenticate('local')(req, res, function () {
       res.redirect('/');

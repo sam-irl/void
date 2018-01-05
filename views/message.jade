@@ -3,4 +3,5 @@ block content
         form.form-message(role=form,action='/message',method='POST')
             h2 New message
             input.form-control(type='text', name='content', placeholder='Compose a message...', required, autofocus)
-            input.form-control(type='hidden', name='user', value='#{user.name}')
+            input.form-control(type='hidden', name='user', value='#{user.username}')
+            button.btn.btn-lg.btn-primary.btn-block(type='submit') Send

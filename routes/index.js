@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var auth = require("../controllers/AuthController.js");
 var message = require('../controllers/MessageController.js');
+var swap = require('../controllers/SwapController');
 
 // restrict index for logged in user only
 router.get('/', auth.home);
@@ -25,6 +26,9 @@ router.get('/logout', auth.logout);
 router.post('/message', message.addNew);
 
 // route to view message
-router.get('/message/:id', message.display);
+router.get('/message/:id', message.displayMessage);
+
+// route for swap init
+router.get('/swapMsg/:id', swap.doSwap);
 
 module.exports = router;

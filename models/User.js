@@ -3,21 +3,12 @@ var Schema = mongoose.Schema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var UserSchema = new Schema({
-    username: {
-        type: String,
-        validate: {
-            validator: function(v, cb) {
-              User.find({name: v}, function(err,docs){
-                 cb(docs.length == 0);
-              });
-            },
-            message: 'User already exists!'
-        }
-    },
+    username: String,
     password: String,
     level: Number,
     joining: Array,
-    messages: Array
+    messages: Array,
+    recieved: Array
 });
 
 UserSchema.plugin(passportLocalMongoose);
