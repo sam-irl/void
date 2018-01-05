@@ -19,7 +19,12 @@ messageController.addNew = function (req, res) {
 messageController.displayMessage = function (req, res) {
     getMessage(req.params.id, res)
         .then(function(msg) {
-            res.render('messageSingle', {msg: msg});
+            msg.heardCount += 1;
+            msg.save(function (err, updated) {
+                if (err) res.send(err);
+            }).then(function (msg) {
+                res.render('messageSingle', {msg: msg});
+            });
         });
 };
 
