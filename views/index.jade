@@ -2,10 +2,15 @@ extends layout
 
 block content
   h1 Welcome to The Void
-  if(!user)
     h2 Whisper into the void, and hear others.
+  if(!user)
     a(href='/login') Login &nbsp;
     a(href='/register') Register
   if(user)
-    h2 #{user.level} into the void, and hear others.
     include message
+    h2 My messages
+    each message in messages
+      pre <strong> #{message.content} </strong>
+    h2 What you've heard
+    each message in recieved
+      pre <strong>#{message.posted}</strong>: #{message.content}

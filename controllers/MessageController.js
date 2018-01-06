@@ -1,17 +1,23 @@
 var Message = require('../models/Message');
 var User = require('../models/User');
+var passport = require('passport');
 
 var messageController = {};
 
 messageController.addNew = function (req, res) {
+    if (!req.body.content || !req.body.user) {
+        res.render('error', {err: 'Request had an empty user and/or content field'});
+    }
+    if (!req.user || (!req.user.username === req.body.user)) {
+        res.render('error', {err: 'Couldn\'t submit message: could not authenticate your username!'});
+        return;
+    }
     saveMessage(res, req)
         .then(function(msg) {
             getUser(msg.posted)
                 .then(function(user) {
-                    addMessageToUser(user, msg)
-                        .then(function(updated) {
-                            res.redirect('/swapMsg/' + msg.id);
-                        });
+                    addMessageToUser(user, msg);
+                    res.redirect('/swapMsg/' + msg.id);
                 });
         });
 };
@@ -37,14 +43,7 @@ messageController.displayMessage = function (req, res) {
  * @return {Message} a promise of the message requested
  */
 function getMessage(id, res) {
-    return Message
-        .findOne({ id: id })
-        .then(function(msg) {
-            return msg;
-        })
-        .catch(function (err) {
-            res.send(err);
-        });
+    return Message.findOne({ id: id });
 }
 
 /**
@@ -69,12 +68,14 @@ function saveMessage(res, req) {
             var newMsg = new Message({
                 id: (last + 1),
                 content: req.body.content,
-                posted: req.body.posted,
-                heardCount: 0
+                posted: req.body.user,
+                heardCount: 0,
+                swapped: false
             });
             newMsg.save(function (err) {
                 if (err) res.send(err);
             });
+            return newMsg;
         })
         .catch(function (err) {
             return err;
@@ -89,15 +90,15 @@ function saveMessage(res, req) {
  * @return {User} the updated user (promise)
  */
 function addMessageToUser(user, message) {
-    user.messages += message;
+    user.messages.push(message);
     user.save(function (err, updated) {
         if (err) return err;
-        return updated;
     });
+    return message;
 }
 
 function getUser(user) {
-    return User.find({username: user});
+    return User.findOne({username: user});
 }
 
 module.exports = messageController;

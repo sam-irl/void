@@ -1,4 +1,10 @@
 extends layout
 
 block content
-    
+    h1 Message Swap
+    h2 What you said
+    p <strong> #{swapping.posted} </strong>
+    pre <strong> #{swapping.content} </strong>
+    h2 What you heard
+    p <strong> #{swapTo.posted} </strong>
+    pre <strong> #{swapTo.content} </strong>
