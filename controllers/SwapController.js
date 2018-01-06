@@ -5,7 +5,7 @@ var swapController = {};
 
 swapController.doSwap = function (req, res) {
     getMessage(req.params.id).then(function(msg) {
-        if (!msg) { res.render('error', {err: 'Could not find the message passed to the swap controller'}); return; }
+        if (!msg) { res.render('error', {err: 'Could not find the message passed to the swap controller', user: req.user}); return; }
         getSwappableMessages(msg.posted).then(function(arr) {
             var msgSwapping;
             if (arr == 0) {
@@ -14,10 +14,12 @@ swapController.doSwap = function (req, res) {
             }
             msgSwapping = arr[Math.round(Math.random() * arr.length)];
             msg.swapped = true;
+            msg.swappedTo = msgSwapping.posted;
             msg.save(function(err, updated) {
                 if (err) return err;
             });
             msgSwapping.swapped = true;
+            msgSwapping.swappedTo = msg.posted;
             msgSwapping.save(function(err, updated) {
                 if (err) return err;
             });
@@ -29,8 +31,7 @@ swapController.doSwap = function (req, res) {
                 user.recieved.push(msg);
                 user.save(function(err, updated) { if (err) return err; });
             });
-            res.render('messageSwap', {swapping: msg, swapTo: msgSwapping});
-            console.log('done')
+            res.render('messageSwap', {swapping: msg, swapTo: msgSwapping, user: req.user});
         });
     });
 }

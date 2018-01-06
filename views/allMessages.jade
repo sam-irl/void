@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    h1 All Messages
+    if (!user)
+        h3 <em>Most recent first</em>
+    if (user)
+        h3 <em>Most recent first: yours, your recieved, others</em>
+    a(href='javascript:location.reload()') Refresh messages
+    if (!user)
+        each message in messages.reverse()
+            pre= message.content
+    if (user)
+        each sentMessage in userMsg.reverse()
+            pre <strong>You</strong> #{sentMessage.content}
+        each recievedMessage in userRec.reverse()
+            pre <strong>#{recievedMessage.posted}</strong> #{recievedMessage.content}
+        each otherMessage in otherMsg.reverse()
+            pre <strong>???</strong> #{otherMessage.content}

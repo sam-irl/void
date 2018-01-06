@@ -6,7 +6,9 @@ var MessageSchema = new Schema({
     heardCount: Number,
     id: Number,
     posted: String,
-    swapped: Boolean
+    swapped: Boolean,
+    swappedTo: Object,
+    global: Boolean
 });
 
 MessageSchema.methods.getId = function () {

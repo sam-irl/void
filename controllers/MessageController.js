@@ -22,29 +22,43 @@ messageController.addNew = function (req, res) {
         });
 };
 
-messageController.displayMessage = function (req, res) {
-    getMessage(req.params.id, res)
-        .then(function(msg) {
-            msg.heardCount += 1;
-            msg.save(function (err, updated) {
-                if (err) res.send(err);
-            }).then(function (msg) {
-                res.render('messageSingle', {msg: msg});
-            });
+messageController.seeAll = function (req, res) {
+    if (req.user == undefined) {
+        function allMessages() {
+            return Message.find({});
+        };
+        allMessages().then(function(msg) {
+            res.render('allMessages', {messages: msg});
         });
+    } else {
+        function userMessages() {
+            return Message.find({posted: req.user.username});
+        };
+        function userRecieved() {
+            return Message.find({"$or": [{swappedTo: req.user.username}, {global: true}]});
+        };
+        function otherMessages() {
+            return Message.find({"$and": [{posted: {"$ne": req.user.username}}, {"$or": [{swappedTo: {"$ne": req.user.username}}, {swapped: false}]}, {"$or": [{global: false}, {global: undefined}]}]});
+        };
+        userMessages().then(function(userMsg) {userRecieved().then(function(userRec) { otherMessages().then(function (otherMsg) {
+            res.render('allMessages', {user: req.user, userMsg: userMsg, userRec: userRec, otherMsg: otherMsg, messages: ''});
+        })})});
+    }
 };
 
+messageController.getOwnSent = function (req, res) {
+    if (req.user == undefined) {
+        res.render('error', {err: 'You must be logged in to view your messages.'});
+    }
+    res.render('messageList', {user: req.user});
+};
 
-/**
- * Gets the message from the database with the given id.
- * 
- * @param {Number} id 
- * @param {*} res 
- * @return {Message} a promise of the message requested
- */
-function getMessage(id, res) {
-    return Message.findOne({ id: id });
-}
+messageController.getOwnRecieved = function (req, res) {
+    if (req.user == undefined) {
+        res.render('error', {err: 'You must be logged in to view your recieved messages.'});
+    }
+    res.render('messageList', {user: req.user, recieved: ' Recieved'});
+};
 
 /**
  * Saves a message to the database.

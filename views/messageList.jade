@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    h1 Your#{recieved} Messages
+    if (recieved)
+        each message in user.recieved
+            pre <strong>#{message.posted}</strong> #{message.content}
+    if (!recieved)
+        each message in user.messages
+            pre= message.content

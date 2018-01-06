@@ -1,16 +1,22 @@
 extends layout
 
 block content
-  h1 Welcome to The Void
-    h2 Whisper into the void, and hear others.
+  h1 Welcome to Void
+  h2 An anti-social social network
   if(!user)
     a(href='/login') Login &nbsp;
     a(href='/register') Register
   if(user)
     include message
+    if (!(queued == undefined))
+      h2 Queued Swaps
+      each message in queued
+        pre <strong> #{message.content} </strong>
     h2 My messages
     each message in messages
       pre <strong> #{message.content} </strong>
+    a(href="/message/sent") See all
     h2 What you've heard
     each message in recieved
       pre <strong>#{message.posted}</strong>: #{message.content}
+    a(href="/message/recieved") See all

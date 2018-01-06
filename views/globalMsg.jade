@@ -1,0 +1,9 @@
+extends layout
+
+block content
+    .container
+        h1 New Global Message
+        form.form-message(role=form,action='/message/global',method='POST')
+            input.form-control(type='text', name='content', placeholder='Compose a message...', required, autofocus)
+            input.form-control(type='text', name='user', placeholder='Username to send from', required)
+            button.btn.btn-lg.btn-primary.btn-block(type='submit') Send

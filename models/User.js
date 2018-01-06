@@ -6,7 +6,11 @@ var UserSchema = new Schema({
     username: String,
     password: String,
     messages: Array,
-    recieved: Array
+    recieved: Array,
+    admin: {
+        type: Boolean,
+        default: false
+    }
 });
 
 UserSchema.plugin(passportLocalMongoose);

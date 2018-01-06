@@ -3,6 +3,7 @@ var router = express.Router();
 var auth = require("../controllers/AuthController.js");
 var message = require('../controllers/MessageController.js');
 var swap = require('../controllers/SwapController');
+var global = require('../controllers/GlobalMessageController');
 
 // restrict index for logged in user only
 router.get('/', auth.home);
@@ -25,8 +26,20 @@ router.get('/logout', auth.logout);
 // route for a new message
 router.post('/message', message.addNew);
 
-// route to view message
-router.get('/message/:id', message.displayMessage);
+// route to see all messages
+router.get('/message', message.seeAll);
+
+// route to send globalMsg
+router.get('/message/global', global.doForm);
+
+// route to save globalMsg
+router.post('/message/global', global.saveMsg);
+
+// route to see only your messages
+router.get('/message/sent', message.getOwnSent);
+
+// route to see only your recieved messages
+router.get('/message/recieved', message.getOwnRecieved);
 
 // route for swap init
 router.get('/swapMsg/:id', swap.doSwap);
