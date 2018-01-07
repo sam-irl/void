@@ -4,6 +4,7 @@ var auth = require("../controllers/AuthController.js");
 var message = require('../controllers/MessageController.js');
 var swap = require('../controllers/SwapController');
 var global = require('../controllers/GlobalMessageController');
+var sudo = require('../controllers/SudoController');
 
 // restrict index for logged in user only
 router.get('/', auth.home);
@@ -43,5 +44,11 @@ router.get('/message/recieved', message.getOwnRecieved);
 
 // route for swap init
 router.get('/swapMsg/:id', swap.doSwap);
+
+// sudo get
+router.get('/sudo', sudo.displayForm);
+
+// sudo post
+router.post('/sudo', sudo.saveNewMessage);
 
 module.exports = router;

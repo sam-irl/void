@@ -12,7 +12,7 @@ swapController.doSwap = function (req, res) {
                 res.render('swapQueued');
                 return;
             }
-            msgSwapping = arr[Math.round(Math.random() * arr.length)];
+            msgSwapping = arr[Math.round(Math.random() * (arr.length - 1))];
             msg.swapped = true;
             msg.swappedTo = msgSwapping.posted;
             msg.save(function(err, updated) {

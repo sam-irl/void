@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1 sudo msg
+    form.form-signin(role='form', action='/sudo', method='post')
+        input.form-control(type='text', name='content', placeholder='Compose a message')
+        input.form-control(type='text', name='userFrom', placeholder='User FROM')
+        input.form-control(type='text', name='userTo', placeholder='User TO - optional')
+        input.form-control(type='checkbox', name='swappable') 
+        | Swappable
+        input.form-control(type='checkbox', name='global')
+        | Global Message
+        button.btn.btn-lg.btn-primary.btn-block(type='submit') Submit

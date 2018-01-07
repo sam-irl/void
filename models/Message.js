@@ -3,7 +3,6 @@ var Schema = mongoose.Schema;
 
 var MessageSchema = new Schema({
     content: String,
-    heardCount: Number,
     id: Number,
     posted: String,
     swapped: Boolean,
